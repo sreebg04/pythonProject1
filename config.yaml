@@ -1,0 +1,4 @@
+---
+azuer_storage_connectioinstring: "DefaultEndpointsProtocol=https;AccountName=localtoazure;AccountKey=5+Z0PMmyi+VIKoWWXHDXoMzNCDIgl4NFwSzjKZDRwMU0ibCft1q2qqlWX5ikAsOQmzhpdGzTNry9BtfXMKJP2g==;EndpointSuffix=core.windows.net"
+csv_container_name: "csvfiles"
+sourcefolder: "C:\\Users\\sree\\OneDrive\\Desktop\\source\\data"
