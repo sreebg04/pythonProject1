@@ -1,18 +1,55 @@
-# import pandas as pd
-# from multiprocessing import Pool
-#
-# def reader(filename):
-#     return pd.read_excel(filename)
-#
-# def main():
-#     pool = Pool(4) # number of cores you want to use
-#     file_list = [file1.xlsx, file2.xlsx, file3.xlsx, ...]
-#     df_list = pool.map(reader, file_list) #creates a list of the loaded df's
-#     df = pd.concat(df_list) # concatenates all the df's into a single df
-#
-# if __name__ == '__main__':
-#     main()
-
 import os
+from os import listdir
+from os.path import isfile, join
+from config import Configure
+import datetime
+import threading
+from pathlib import Path
 
-print(os.path.basename(R'C:\Users\sree\OneDrive\Desktop\source\data\target/test.txt'))
+
+class Split:
+
+    def __init__(self, source, item):
+        self.source = source
+        self.item = item
+
+    def split(self):
+        linesPerFile = 400000
+        filename = 1
+        result_files = []
+        targetfolder = join(source, Path(str(self.source + "/" + self.item)).stem)
+        if not os.path.exists(targetfolder):
+            os.makedirs(targetfolder)
+        with open(join(self.source, self.item), 'r') as f:
+            csvfile = f.readlines()
+        for i in range(0, len(csvfile), linesPerFile):
+            with open(os.path.join(targetfolder, (str(self.item) + str(filename) + '.csv')),
+                      'w+') as f:
+                if filename > 1:
+                    f.write(csvfile[0])
+                f.writelines(csvfile[i:i + linesPerFile])
+            filename += 1
+        onlyfiles = [f for f in listdir(targetfolder) if isfile(join(targetfolder, f))]
+        for file in onlyfiles:
+            result_files.append(join(targetfolder, file))
+        return result_files
+
+
+def split_all():
+    con = Configure("cred.json")
+    config_datas = con.config()
+    files = [file for file in listdir(config_datas["source"]) if isfile(join(config_datas["source"], file))]
+    thread_list = []
+    print(files)
+    print("startupload:  ", datetime.datetime.now())
+    for file in files:
+        thread = threading.Thread(target=Split.split, args=(config_datas["source"], file))
+        thread_list.append(thread)
+    for thr in thread_list:
+        thr.start()
+    for thre in thread_list:
+        thre.join()
+
+
+split_all()
+print("endupload:  ", datetime.datetime.now())

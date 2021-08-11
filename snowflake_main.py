@@ -1,3 +1,5 @@
+#! /usr/bin/python
+
 from splitfile import Splitfile
 from config import Configure
 import snowflake.connector
