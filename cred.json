@@ -5,5 +5,5 @@
   "database": "local_2_snowflake",
   "schema": "PUBLIC",
   "warehouse": "COMPUTE_WH",
-  "filesource": "C:\\Users\\sree\\OneDrive\\Desktop\\source\\data"
+  "filesource": "C:\\Users\\sree\\OneDrive\\Desktop\\source"
 }
