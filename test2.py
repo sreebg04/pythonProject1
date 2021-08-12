@@ -8,17 +8,10 @@ from pathlib import Path
 import threading
 
 
-# def split_all_files(source, direc, item):
 def split_all_files(source):
     linesPerFile = 400000
     filename = 1
     resultfiles = []
-    # for direc in listdir(source):
-    #     if isdir(join(source, direc)):
-    #         for item in listdir(join(source, direc)):
-    #             print(join(source, direc, item))
-    # datafile = (join(source, direc, item))
-    # newfolder = (join(source, direc, Path(datafile).stem))
     newfolder = join(os.path.dirname(source), Path(source).stem)
     if not os.path.exists(newfolder):
         os.makedirs(newfolder)
@@ -58,7 +51,3 @@ con = Configure("cred.json")
 config_datas = con.config()
 split(config_datas["source"])
 print("end", datetime.datetime.now())
-
-# con = Configure("cred.json")
-# config_datas = con.config()
-# split_all_files(config_datas["source"])
