@@ -1,6 +1,6 @@
 #! /usr/bin/python
 
-from splitfile import Splitfile
+from splitfile import split
 from config import Configure
 import snowflake.connector
 import datetime
