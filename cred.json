@@ -2,7 +2,7 @@
 "userid":"sreebg",
 "password":"Sisi@1234",
 "account":"dd21952.us-east-2.aws",
-  "database": "local_2_snowflake",
+  "database": ["local_2_snowflake","local2snowflake2"],
   "schema": "PUBLIC",
   "warehouse": "COMPUTE_WH",
   "filesource": "C:\\Users\\sree\\OneDrive\\Desktop\\source"
