@@ -7,6 +7,7 @@ import threading
 from pathlib import Path
 import threading
 import concurrent.futures
+import itertools
 
 
 def split_all_files(source):
@@ -45,10 +46,11 @@ def split(source):
             future = executor.submit(split_all_files, file)
             return_value = future.result()
             result_list.append(return_value)
-    return result_list
+    finallist = itertools.chain.from_iterable(result_list)
+    return finallist
 
 
 con = Configure("cred.json")
 config_datas = con.config()
-split(config_datas["source"])
+print(split(config_datas["source"]))
 print("end", datetime.datetime.now())
