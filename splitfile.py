@@ -7,7 +7,6 @@ import threading
 from pathlib import Path
 import threading
 import concurrent.futures
-import itertools
 
 
 def split_all_files(source):
@@ -46,7 +45,7 @@ def split(source):
             future = executor.submit(split_all_files, file)
             return_value = future.result()
             result_list.append(return_value)
-    finallist = itertools.chain.from_iterable(result_list)
+    finallist = [item for sublist in result_list for item in sublist]
     return finallist
 
 
