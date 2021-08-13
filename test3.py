@@ -6,6 +6,7 @@ import datetime
 import threading
 from pathlib import Path
 import threading
+import concurrent.futures
 
 
 def split_all_files(source):
@@ -31,7 +32,6 @@ def split_all_files(source):
 
 def split(source):
     file_list = []
-    thread_list = []
     for direc in listdir(source):
         if isdir(join(source, direc)):
             for item in listdir(join(source, direc)):
@@ -39,12 +39,10 @@ def split(source):
                 file_list.append(fileitem)
     print("start", datetime.datetime.now())
     for file in file_list:
-        thread = threading.Thread(target=split_all_files, args=(file,))
-        thread_list.append(thread)
-    for thr in thread_list:
-        thr.start()
-    for thre in thread_list:
-        thre.join()
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            future = executor.submit(split_all_files, file)
+            return_value = future.result()
+            print(return_value)
 
 
 con = Configure("cred.json")
