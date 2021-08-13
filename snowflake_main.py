@@ -38,21 +38,12 @@ def upload(config_file, source_file, database, table):
 
 
 def main():
-    # con = Configure("cred.json")
-    # config_datas = con.config()
-    # datafile = Splitfile(config_datas["source"])
-    # resultfiles = datafile.split()
     con = Configure("cred.json")
     config_datas = con.config()
     resultfiles = split(config_datas["source"])
     print(resultfiles)
     thread_list = []
     print("startupload:  ", datetime.datetime.now())
-    # for file in resultfiles:
-    #     for direc in listdir(config_datas["source"]):
-    #         if isdir(join(config_datas["source"], direc)) and str(direc) in file:
-    #             for dire in listdir(join(config_datas["source"])):
-    #                 if dire in file:
     for file in resultfiles:
         for direc in listdir(config_datas["source"]):
             if isdir(join(config_datas["source"], direc)) and str(direc) in file:

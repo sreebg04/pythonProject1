@@ -19,7 +19,7 @@ def split_all_files(source):
     with open(source, 'r') as f:
         csvfile = f.readlines()
     for i in range(0, len(csvfile), linesPerFile):
-        with open((join(newfolder, (str(Path(source).stem) + str(filename)) + '.csv')), 'w+') as f:
+        with open((join(newfolder, (str(Path(source).stem) + "_" + str(filename)) + '.csv')), 'w+') as f:
             if filename > 1:
                 f.write(csvfile[0])
             f.writelines(csvfile[i:i + linesPerFile])
@@ -46,9 +46,3 @@ def split(source):
             result_list.append(return_value)
     finallist = [item for sublist in result_list for item in sublist]
     return finallist
-
-
-# con = Configure("cred.json")
-# config_datas = con.config()
-# resultfiles = split(config_datas["source"])
-# print(resultfiles)
