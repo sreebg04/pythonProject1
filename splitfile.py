@@ -38,7 +38,6 @@ def split(source):
             for item in listdir(join(source, direc)):
                 fileitem = join(source, direc, item)
                 file_list.append(fileitem)
-    print("start", datetime.datetime.now())
 
     for file in file_list:
         with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -47,3 +46,9 @@ def split(source):
             result_list.append(return_value)
     finallist = [item for sublist in result_list for item in sublist]
     return finallist
+
+
+# con = Configure("cred.json")
+# config_datas = con.config()
+# resultfiles = split(config_datas["source"])
+# print(resultfiles)
