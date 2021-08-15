@@ -17,5 +17,6 @@ class Configure:
         database = cred["database"]
         schema = cred["schema"]
         source = cred["filesource"]
+        archive = cred["archive"]
         return {"password": password, "user": user, "account": account, "warehouse": warehouse, "database": database,
-                "schema": schema, "source": source}
+                "schema": schema, "source": source, "archive": archive}
