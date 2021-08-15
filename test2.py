@@ -49,5 +49,5 @@ def split(source):
 
 con = Configure("cred.json")
 config_datas = con.config()
-split(config_datas["source"])
+print(split(config_datas["source"]))
 print("end", datetime.datetime.now())
