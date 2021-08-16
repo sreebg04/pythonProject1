@@ -9,6 +9,7 @@ from pathlib import Path
 from os import listdir
 from os.path import isfile, join, isdir
 import os.path
+import shutil
 print("startprg:  ", datetime.datetime.now())
 
 
@@ -57,6 +58,18 @@ def main():
         thre.join()
 
 
+def archive():
+    con = Configure("cred.json")
+    config_datas = con.config()
+
+    source = config_datas["source"]
+    target = config_datas["archive"]
+
+    for file in listdir(source):
+        shutil.move(os.path.join(source, file), target)
+
+
 if __name__ == "__main__":
     main()
+    archive()
     print("end:  ", datetime.datetime.now())
