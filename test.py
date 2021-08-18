@@ -54,10 +54,10 @@ def main():
     for file in resultfiles:
         for direc in listdir(config_datas["source"]):
             if isdir(join(config_datas["source"], direc)) and str(direc) in file:
-                for dire in listdir(join(config_datas["source"])):
-                    if dire in file:
-                        thread = threading.Thread(target=upload, args=(conn, "cred.json", file, direc, os.path.basename(os.path.dirname(file))))
-                        thread_list.append(thread)
+                if direc == file.split('\\')[-3]:
+                    print(file, direc, os.path.basename(os.path.dirname(file)))
+                    thread = threading.Thread(target=upload, args=(conn, "cred.json", file, direc, os.path.basename(os.path.dirname(file))))
+                    thread_list.append(thread)
     for thr in thread_list:
         thr.start()
     for thre in thread_list:

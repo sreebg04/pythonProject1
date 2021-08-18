@@ -46,3 +46,18 @@ def split(source):
             result_list.append(return_value)
     finallist = [item for sublist in result_list for item in sublist]
     return finallist
+
+
+con = Configure("cred.json")
+config_datas = con.config()
+resultfiles = split(config_datas["source"])
+
+print(len(resultfiles))
+
+for file in resultfiles:
+    for direc in listdir(config_datas["source"]):
+        if isdir(join(config_datas["source"], direc)) and str(direc) in file:
+            if direc == file.split('\\')[-3]:
+                print(file, direc, os.path.basename(os.path.dirname(file)))
+
+
