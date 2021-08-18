@@ -1,49 +1,81 @@
-import os
-from os import listdir
-from os.path import isfile, join
+#! /usr/bin/python
+
+from splitfile import split
 from config import Configure
+import snowflake.connector
 import datetime
 import threading
 from pathlib import Path
+from os import listdir
+from os.path import isfile, join, isdir
+import os.path
+import shutil
+print("startprg:  ", datetime.datetime.now())
 
 
-def split(source, item):
-    linesPerFile = 400000
-    filename = 1
-    result_files = []
-    targetfolder = join(source, Path(str(source + "/" + item)).stem)
-    if not os.path.exists(targetfolder):
-        os.makedirs(targetfolder)
-    with open(join(source, item), 'r') as f:
-        csvfile = f.readlines()
-    for i in range(0, len(csvfile), linesPerFile):
-        with open(os.path.join(targetfolder, (str(item)+str(filename) + '.csv')),
-                  'w+') as f:
-            if filename > 1:
-                f.write(csvfile[0])
-            f.writelines(csvfile[i:i + linesPerFile])
-        filename += 1
-    onlyfiles = [f for f in listdir(targetfolder) if isfile(join(targetfolder, f))]
-    for file in onlyfiles:
-        result_files.append(join(targetfolder, file))
-    return result_files
+def connect(config_file):
+    cone = Configure(config_file)
+    config_data = cone.config()
+
+    connection = snowflake.connector.connect(
+        user=config_data["user"],
+        password=config_data["password"],
+        account=config_data["account"],)
+
+    return connection
 
 
-def split_all():
+def upload(connection, config_file, source_file, database, table):
+    cone = Configure(config_file)
+    config_data = cone.config()
+
+    connection.cursor().execute("USE WAREHOUSE " + config_data["warehouse"])
+    connection.cursor().execute("USE DATABASE " + database)
+    connection.cursor().execute("USE SCHEMA " + config_data["schema"])
+    connection.cursor().execute("USE ROLE " + config_data["role"])
+
+    cs = connection.cursor()
+    try:
+        sql = "PUT file:///" + source_file + " @" + database + ".PUBLIC.%" + table + ";"
+        cs.execute(sql)
+    finally:
+        cs.close()
+    connection.close()
+
+
+def main():
+    print("Split_start", datetime.datetime.now())
     con = Configure("cred.json")
     config_datas = con.config()
-    files = [file for file in listdir(config_datas["source"]) if isfile(join(config_datas["source"], file))]
+    resultfiles = split(config_datas["source"])
     thread_list = []
-    print(files)
     print("startupload:  ", datetime.datetime.now())
-    for file in files:
-        thread = threading.Thread(target=split, args=(config_datas["source"], file))
-        thread_list.append(thread)
+    conn = connect("cred.json")
+    for file in resultfiles:
+        for direc in listdir(config_datas["source"]):
+            if isdir(join(config_datas["source"], direc)) and str(direc) in file:
+                for dire in listdir(join(config_datas["source"])):
+                    if dire in file:
+                        thread = threading.Thread(target=upload, args=(conn, "cred.json", file, direc, os.path.basename(os.path.dirname(file))))
+                        thread_list.append(thread)
     for thr in thread_list:
         thr.start()
     for thre in thread_list:
         thre.join()
 
 
-split_all()
-print("endupload:  ", datetime.datetime.now())
+def archive():
+    con = Configure("cred.json")
+    config_datas = con.config()
+
+    source = config_datas["source"]
+    target = config_datas["archive"]
+
+    for file in listdir(source):
+        shutil.move(os.path.join(source, file), target)
+
+
+if __name__ == "__main__":
+    main()
+    archive()
+    print("end:  ", datetime.datetime.now())

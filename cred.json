@@ -4,7 +4,8 @@
 "account":"pz25082.east-us-2.azure",
   "database": ["local_2_snowflake","local2snowflake2"],
   "schema": "PUBLIC",
-  "warehouse": "COMPUTE_WH",
+  "warehouse": "SNOWFLAKE_POC",
   "filesource": "C:\\Users\\sree\\OneDrive\\Desktop\\data_source\\source",
-  "archive": "C:\\Users\\sree\\OneDrive\\Desktop\\data_source\\Archive"
+  "archive": "C:\\Users\\sree\\OneDrive\\Desktop\\data_source\\Archive",
+"role": "ACCOUNTADMIN"
 }

@@ -6,23 +6,26 @@ import datetime
 import threading
 from pathlib import Path
 import threading
+from fsplit.filesplit import Filesplit
+import datetime
+
+fs = Filesplit()
+
+
+def split_cb(f, s):
+    print("file: {0}, size: {1}".format(f, s))
 
 
 def split_all_files(source):
-    linesPerFile = 400000
-    filename = 1
+
     resultfiles = []
     newfolder = join(os.path.dirname(source), Path(source).stem)
     if not os.path.exists(newfolder):
         os.makedirs(newfolder)
-    with open(source, 'r') as f:
-        csvfile = f.readlines()
-    for i in range(0, len(csvfile), linesPerFile):
-        with open((join(newfolder, (str(Path(source).stem) + str(filename)) + '.csv')), 'w+') as f:
-            if filename > 1:
-                f.write(csvfile[0])
-            f.writelines(csvfile[i:i + linesPerFile])
-        filename += 1
+
+    fs.split(file=source, split_size=50000000,
+             output_dir=newfolder, callback=split_cb)
+
     onlyfiles = [f for f in listdir(newfolder) if isfile(join(newfolder, f))]
     for file in onlyfiles:
         resultfiles.append(join(newfolder, file))

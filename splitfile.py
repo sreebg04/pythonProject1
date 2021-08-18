@@ -10,7 +10,7 @@ import concurrent.futures
 
 
 def split_all_files(source):
-    linesPerFile = 400000
+    linesPerFile = 1000000
     filename = 1
     resultfiles = []
     newfolder = join(os.path.dirname(source), Path(source).stem)
