@@ -1,6 +1,6 @@
 {
-"userid":"sreebg04",
-"password":"Sisi@1234",
+"userid":"user id",
+"password":"password",
 "account":"pz25082.east-us-2.azure",
   "database": ["local_2_snowflake","local2snowflake2"],
   "schema": "PUBLIC",
