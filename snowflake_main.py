@@ -91,7 +91,6 @@ def copy(config_file, database, table):
 
 
 def copy_main():
-    print("Split_start", datetime.datetime.now())
     con = Configure("cred.json")
     config_datas = con.config()
     source = config_datas["source"]
