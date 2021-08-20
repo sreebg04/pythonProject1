@@ -13,7 +13,7 @@ import shutil
 print("startprg:  ", datetime.datetime.now())
 
 
-def upload(config_file, source_file, database, table):
+def upload(config_file, source_file, database):
     cone = Configure(config_file)
     config_data = cone.config()
 
@@ -32,7 +32,8 @@ def upload(config_file, source_file, database, table):
 
     cs = connection.cursor()
     try:
-        sql = "PUT file:///" + source_file + " @" + database + ".PUBLIC.%" + table + ";"
+        # sql = "PUT file:///" + source_file + " @" + database + ".PUBLIC.%" + table + ";"
+        sql = "PUT file:///" + source_file + " @" + database + ";"
         cs.execute(sql)
     finally:
         cs.close()
@@ -51,7 +52,8 @@ def main():
             if isdir(join(config_datas["source"], direc)) and str(direc) in file:
                 for dire in listdir(join(config_datas["source"])):
                     if dire in file:
-                        thread = threading.Thread(target=upload, args=("cred.json", file, direc, os.path.basename(os.path.dirname(file))))
+                        # thread = threading.Thread(target=upload, args=("cred.json", file, direc, os.path.basename(os.path.dirname(file))))
+                        thread = threading.Thread(target=upload, args=("cred.json", file, direc))
                         thread_list.append(thread)
     for thr in thread_list:
         thr.start()
@@ -66,10 +68,7 @@ def copy(config_file, database, table):
     connection = snowflake.connector.connect(
         user=config_data["user"],
         password=config_data["password"],
-        account=config_data["account"],
-        warehouse=config_data["warehouse"],
-        database=database,
-        schema=config_data["schema"], )
+        account=config_data["account"],)
 
     connection.cursor().execute("USE WAREHOUSE " + config_data["warehouse"])
     connection.cursor().execute("USE DATABASE " + database)
@@ -79,12 +78,14 @@ def copy(config_file, database, table):
     cs = connection.cursor()
     try:
         sql = """COPY into table
-        FROM @%table
+        FROM @stage
         file_format = (type = csv field_optionally_enclosed_by='"')
         pattern = '.*table_[1-6].csv.gz'
-        on_error = 'skip_file';"""
-        res = sql.replace("table", table, 3)
-        cs.execute(res)
+        on_error = 'ABORT_STATEMENT';"""
+        res = sql.replace("table", table, 2)
+        res_ = res.replace("stage", database, 1)
+        print(res_)
+        cs.execute(res_)
     finally:
         cs.close()
     connection.close()

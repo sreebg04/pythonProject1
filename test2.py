@@ -1,13 +1,13 @@
-# from splitfile import split
-# from config import Configure
+from splitfile import split
+from config import Configure
 # import snowflake.connector
-# import datetime
-# import threading
-# from pathlib import Path
-# from os import listdir
-# from os.path import isfile, join, isdir
-# import os.path
-# import shutil
+import datetime
+import threading
+from pathlib import Path
+from os import listdir
+from os.path import isfile, join, isdir
+import os.path
+import shutil
 #
 # print("startprg:  ", datetime.datetime.now())
 #
@@ -65,3 +65,23 @@
 # if __name__ == "__main__":
 #     copy_main()
 #     print("end:  ", datetime.datetime.now())
+
+
+# con = Configure("cred.json")
+# config_datas = con.config()
+# source = config_datas["source"]
+# thread_list = []
+#
+# for database in listdir(source):
+#     if isdir(join(source, database)):
+#         for table in listdir(join(source, database)):
+#             if not isdir(join(join(source, database), table)):
+#                 print(database, Path(table).stem)
+sql = """COPY into table
+        FROM @%stage
+        file_format = (type = csv field_optionally_enclosed_by='"')
+        pattern = '.*table_[1-6].csv.gz'
+        on_error = 'ABORT_STATEMENT';"""
+res = sql.replace("table", "tablename", 2)
+res_ = res.replace("stage", "databasename", 1)
+print(res_)
