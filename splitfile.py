@@ -46,6 +46,3 @@ def split(source):
             result_list.append(return_value)
     finallist = [item for sublist in result_list for item in sublist]
     return finallist
-
-
-

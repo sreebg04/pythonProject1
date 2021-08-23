@@ -1,18 +1,19 @@
-from splitfile import split
-from config import Configure
+# from splitfile import split
+# from config import Configure
 # import snowflake.connector
-import datetime
-import threading
-from pathlib import Path
-from os import listdir
-from os.path import isfile, join, isdir
-import os.path
-import shutil
-#
+# import datetime
+# import threading
+# from pathlib import Path
+# from os import listdir
+# from os.path import isfile, join, isdir
+# import os.path
+# import shutil
+# import concurrent.futures
 # print("startprg:  ", datetime.datetime.now())
 #
 #
-# def copy(config_file, database, table):
+# def upload(config_file, source_file, database):
+#     upload_results = []
 #     cone = Configure(config_file)
 #     config_data = cone.config()
 #
@@ -31,57 +32,51 @@ import shutil
 #
 #     cs = connection.cursor()
 #     try:
-#         sql = """COPY into table
-#         FROM @%table
-#         file_format = (type = csv field_optionally_enclosed_by='"')
-#         pattern = '.*table_[1-6].csv.gz'
-#         on_error = 'skip_file';"""
-#         res = sql.replace("table", table, 3)
-#         cs.execute(res)
+#         # sql = "PUT file:///" + source_file + " @" + database + ".PUBLIC.%" + table + ";"
+#         sql = "PUT file:///" + source_file + " @" + database + ";"
+#         upload_results.append(cs.execute(sql))
 #     finally:
 #         cs.close()
 #     connection.close()
+#     return upload_results
 #
 #
-# def copy_main():
+# def main():
 #     print("Split_start", datetime.datetime.now())
 #     con = Configure("cred.json")
 #     config_datas = con.config()
-#     source = config_datas["source"]
-#     thread_list = []
-#     print("startcopy:  ", datetime.datetime.now())
-#     for database in listdir(source):
-#         if isdir(join(source, database)):
-#             for table in listdir(join(source, database)):
-#                 if not isdir(join(join(source, database), table)):
-#                     thread = threading.Thread(target=copy, args=("cred.json", database, table))
-#                     thread_list.append(thread)
-#     for thr in thread_list:
-#         thr.start()
-#     for thre in thread_list:
-#         thre.join()
+#     resultfiles = split(config_datas["source"])
+#     result_list = []
+#     print("startupload:  ", datetime.datetime.now())
+#
+#     with concurrent.futures.ThreadPoolExecutor() as executor:
+#         for file in resultfiles:
+#             for direc in listdir(config_datas["source"]):
+#                 if isdir(join(config_datas["source"], direc)) and str(direc) in file:
+#                     for dire in listdir(join(config_datas["source"])):
+#                         if dire in file:
+#                             future = executor.submit(upload, "cred.json", file, direc)
+#                             return_value = future.result()
+#                             result_list.append(return_value)
+#     finallist = [item for sublist in result_list for item in sublist]
+#     return finallist
+#
+#     #
+#     # for file in resultfiles:
+#     #     for direc in listdir(config_datas["source"]):
+#     #         if isdir(join(config_datas["source"], direc)) and str(direc) in file:
+#     #             for dire in listdir(join(config_datas["source"])):
+#     #                 if dire in file:
+#     #                     # thread = threading.Thread(target=upload, args=("cred.json", file, direc, os.path.basename(os.path.dirname(file))))
+#     #                     thread = threading.Thread(target=upload, args=("cred.json", file, direc))
+#     #                     thread_list.append(thread)
+#     # for thr in thread_list:
+#     #     thr.start()
+#     # for thre in thread_list:
+#     #     thre.join()
 #
 #
 # if __name__ == "__main__":
-#     copy_main()
+#     print(main())
+#     # archive()
 #     print("end:  ", datetime.datetime.now())
-
-
-# con = Configure("cred.json")
-# config_datas = con.config()
-# source = config_datas["source"]
-# thread_list = []
-#
-# for database in listdir(source):
-#     if isdir(join(source, database)):
-#         for table in listdir(join(source, database)):
-#             if not isdir(join(join(source, database), table)):
-#                 print(database, Path(table).stem)
-sql = """COPY into table
-        FROM @%stage
-        file_format = (type = csv field_optionally_enclosed_by='"')
-        pattern = '.*table_[1-6].csv.gz'
-        on_error = 'ABORT_STATEMENT';"""
-res = sql.replace("table", "tablename", 2)
-res_ = res.replace("stage", "databasename", 1)
-print(res_)
