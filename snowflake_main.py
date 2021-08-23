@@ -33,7 +33,6 @@ def upload(config_file, source_file, database):
     connection.cursor().execute("USE ROLE " + config_data["role"])
     cs = connection.cursor()
     try:
-        # sql = "PUT file:///" + source_file + " @" + database + ".PUBLIC.%" + table + ";"
         sql = "PUT file:///" + source_file + " @" + database + ";"
         cs.execute(sql)
     finally:
