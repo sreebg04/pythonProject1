@@ -46,5 +46,3 @@ def load_history(config_file):
 
 dat = load_history("cred.json")
 print(dat)
-
-
