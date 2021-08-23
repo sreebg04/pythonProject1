@@ -109,6 +109,47 @@ def copy_main():
         thre.join()
 
 
+def remove_old_staged_files(config_file, database):
+    cone = Configure(config_file)
+    config_data = cone.config()
+
+    connection = snowflake.connector.connect(
+        user=config_data["user"],
+        password=config_data["password"],
+        account=config_data["account"], )
+
+    connection.cursor().execute("USE WAREHOUSE " + config_data["warehouse"])
+    connection.cursor().execute("USE DATABASE " + database)
+    connection.cursor().execute("USE SCHEMA " + config_data["schema"])
+    connection.cursor().execute("USE ROLE " + config_data["role"])
+
+    cs = connection.cursor()
+    try:
+        sql = "REMOVE @" + database + " pattern='.*.csv.gz';"
+        cs.execute(sql)
+    finally:
+        cs.close()
+    connection.close()
+
+
+def delete_old_staged_files():
+    con = Configure("cred.json")
+    config_datas = con.config()
+    source = config_datas["source"]
+    thread_list = []
+    print("startcopy:  ", datetime.datetime.now())
+    for database in listdir(source):
+        if isdir(join(source, database)):
+            for table in listdir(join(source, database)):
+                if not isdir(join(join(source, database), table)):
+                    thread = threading.Thread(target=remove_old_staged_files, args=("cred.json", database))
+                    thread_list.append(thread)
+    for thr in thread_list:
+        thr.start()
+    for thre in thread_list:
+        thre.join()
+
+
 def archive():
     con = Configure("cred.json")
     config_datas = con.config()
@@ -121,6 +162,7 @@ def archive():
 
 
 if __name__ == "__main__":
+    delete_old_staged_files()
     main()
     copy_main()
     archive()
