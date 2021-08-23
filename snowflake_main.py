@@ -68,7 +68,6 @@ def copy(config_file, database, table):
     connection.cursor().execute("USE DATABASE " + database)
     connection.cursor().execute("USE SCHEMA " + config_data["schema"])
     connection.cursor().execute("USE ROLE " + config_data["role"])
-
     cs = connection.cursor()
     try:
         sql = """COPY into table
