@@ -78,7 +78,6 @@ def copy(config_file, database, table):
         on_error = 'ABORT_STATEMENT';"""
         res = sql.replace("table", table, 2)
         res_ = res.replace("stage", database, 1)
-        print(res_)
         cs.execute(res_)
     finally:
         cs.close()
