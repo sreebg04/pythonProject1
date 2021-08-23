@@ -52,7 +52,6 @@ def main():
             if isdir(join(config_datas["source"], direc)) and str(direc) in file:
                 for dire in listdir(join(config_datas["source"])):
                     if dire in file:
-                        # thread = threading.Thread(target=upload, args=("cred.json", file, direc, os.path.basename(os.path.dirname(file))))
                         thread = threading.Thread(target=upload, args=("cred.json", file, direc))
                         thread_list.append(thread)
     for thr in thread_list:
