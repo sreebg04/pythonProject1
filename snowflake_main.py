@@ -125,7 +125,7 @@ def delete_old_staged_files():
     config_datas = con.config()
     source = config_datas["source"]
     thread_list = []
-    print("startcopy:  ", datetime.datetime.now())
+    print("remove old stage files:  ", datetime.datetime.now())
     for database in listdir(source):
         if isdir(join(source, database)):
             for table in listdir(join(source, database)):
