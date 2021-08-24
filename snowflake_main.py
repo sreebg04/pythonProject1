@@ -136,6 +136,48 @@ def delete_old_staged_files():
         thre.join()
 
 
+def load_history(config_file, database):
+    cone = Configure(config_file)
+    config_data = cone.config()
+    connection = connect(config_file)
+    connection.cursor().execute("USE WAREHOUSE " + config_data["warehouse"])
+    connection.cursor().execute("USE DATABASE " + database)
+    connection.cursor().execute("USE SCHEMA " + config_data["schema"])
+    connection.cursor().execute("USE ROLE " + config_data["role"])
+    cs = connection.cursor()
+    try:
+        sql = "select * from information_schema.load_history order by last_load_time desc;"
+        cs.execute(sql)
+        result = cs.fetch_pandas_all()
+        res = result.loc[result['STATUS'] != "LOADED"]
+        if len(res.index) > 0:
+            print("Error:   ", database)
+        else:
+            print("Loaded successfully:   ", database)
+    finally:
+        cs.close()
+    connection.close()
+    return
+
+
+def history():
+    con = Configure("cred.json")
+    config_datas = con.config()
+    source = config_datas["source"]
+    thread_list = []
+    print("Checking loading history:  ", datetime.datetime.now())
+    for database in listdir(source):
+        if isdir(join(source, database)):
+            for table in listdir(join(source, database)):
+                if not isdir(join(join(source, database), table)):
+                    thread = threading.Thread(target=load_history, args=("cred.json", database))
+                    thread_list.append(thread)
+    for thr in thread_list:
+        thr.start()
+    for thre in thread_list:
+        thre.join()
+
+
 def archive():
     con = Configure("cred.json")
     config_datas = con.config()
@@ -149,5 +191,7 @@ if __name__ == "__main__":
     delete_old_staged_files()
     main()
     copy_main()
+    history()
     archive()
+
     print("end:  ", datetime.datetime.now())
