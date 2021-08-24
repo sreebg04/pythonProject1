@@ -126,10 +126,8 @@ def delete_old_staged_files():
     print("remove old stage files:  ", datetime.datetime.now())
     for database in listdir(source):
         if isdir(join(source, database)):
-            for table in listdir(join(source, database)):
-                if not isdir(join(join(source, database), table)):
-                    thread = threading.Thread(target=remove_old_staged_files, args=("cred.json", database))
-                    thread_list.append(thread)
+            thread = threading.Thread(target=remove_old_staged_files, args=("cred.json", database))
+            thread_list.append(thread)
     for thr in thread_list:
         thr.start()
     for thre in thread_list:
@@ -168,10 +166,8 @@ def history():
     print("Checking loading history:  ", datetime.datetime.now())
     for database in listdir(source):
         if isdir(join(source, database)):
-            for table in listdir(join(source, database)):
-                if not isdir(join(join(source, database), table)):
-                    thread = threading.Thread(target=load_history, args=("cred.json", database))
-                    thread_list.append(thread)
+            thread = threading.Thread(target=load_history, args=("cred.json", database))
+            thread_list.append(thread)
     for thr in thread_list:
         thr.start()
     for thre in thread_list:
