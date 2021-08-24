@@ -76,6 +76,7 @@ def remove_old_staged_files(config_file, database):
     try:
         sql = "REMOVE @" + database + " pattern='.*.csv.gz';"
         cs.execute(sql)
+        print("Removed old staged files from :  ", database)
     finally:
         cs.close()
     connection.close()
@@ -131,19 +132,23 @@ def perform_action(action):
     source = config_datas["source"]
     thread_list = []
     print(str(action), datetime.datetime.now())
-    for database in listdir(source):
-        if isdir(join(source, database)):
-            for table in listdir(join(source, database)):
-                if not isdir(join(join(source, database), table)):
-                    if str(action) == "copy":
+    if str(action) == "copy":
+        for database in listdir(source):
+            if isdir(join(source, database)):
+                for table in listdir(join(source, database)):
+                    if not isdir(join(join(source, database), table)):
                         thread = threading.Thread(target=copy, args=("cred.json", database, Path(table).stem))
                         thread_list.append(thread)
-                    elif str(action) == "remove_old_staged_files":
-                        thread = threading.Thread(target=remove_old_staged_files, args=("cred.json", database))
-                        thread_list.append(thread)
-                    elif str(action) == "load_history":
-                        thread = threading.Thread(target=load_history, args=("cred.json", database))
-                        thread_list.append(thread)
+    elif str(action) == "remove_old_staged_files":
+        for database in listdir(source):
+            if isdir(join(source, database)):
+                thread = threading.Thread(target=remove_old_staged_files, args=("cred.json", database))
+                thread_list.append(thread)
+    elif str(action) == "load_history":
+        for database in listdir(source):
+            if isdir(join(source, database)):
+                thread = threading.Thread(target=load_history, args=("cred.json", database))
+                thread_list.append(thread)
     for thr in thread_list:
         thr.start()
     for thre in thread_list:
