@@ -7,7 +7,7 @@ import datetime
 import threading
 from pathlib import Path
 from os import listdir
-from os.path import isfile, join, isdir
+from os.path import join, isdir
 import os.path
 import shutil
 print("startprg:  ", datetime.datetime.now())
