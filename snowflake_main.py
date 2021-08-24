@@ -83,24 +83,6 @@ def copy(config_file, database, table):
     connection.close()
 
 
-def copy_main():
-    con = Configure("cred.json")
-    config_datas = con.config()
-    source = config_datas["source"]
-    thread_list = []
-    print("startcopy:  ", datetime.datetime.now())
-    for database in listdir(source):
-        if isdir(join(source, database)):
-            for table in listdir(join(source, database)):
-                if not isdir(join(join(source, database), table)):
-                    thread = threading.Thread(target=copy, args=("cred.json", database, Path(table).stem))
-                    thread_list.append(thread)
-    for thr in thread_list:
-        thr.start()
-    for thre in thread_list:
-        thre.join()
-
-
 def remove_old_staged_files(config_file, database):
     cone = Configure(config_file)
     config_data = cone.config()
@@ -116,24 +98,6 @@ def remove_old_staged_files(config_file, database):
     finally:
         cs.close()
     connection.close()
-
-
-def delete_old_staged_files():
-    con = Configure("cred.json")
-    config_datas = con.config()
-    source = config_datas["source"]
-    thread_list = []
-    print("remove old stage files:  ", datetime.datetime.now())
-    for database in listdir(source):
-        if isdir(join(source, database)):
-            for table in listdir(join(source, database)):
-                if not isdir(join(join(source, database), table)):
-                    thread = threading.Thread(target=remove_old_staged_files, args=("cred.json", database))
-                    thread_list.append(thread)
-    for thr in thread_list:
-        thr.start()
-    for thre in thread_list:
-        thre.join()
 
 
 def load_history(config_file, database):
@@ -160,18 +124,25 @@ def load_history(config_file, database):
     return
 
 
-def history():
+def perform_action(action):
     con = Configure("cred.json")
     config_datas = con.config()
     source = config_datas["source"]
     thread_list = []
-    print("Checking loading history:  ", datetime.datetime.now())
+    print(str(action), datetime.datetime.now())
     for database in listdir(source):
         if isdir(join(source, database)):
             for table in listdir(join(source, database)):
                 if not isdir(join(join(source, database), table)):
-                    thread = threading.Thread(target=load_history, args=("cred.json", database))
-                    thread_list.append(thread)
+                    if str(action) == "copy":
+                        thread = threading.Thread(target=copy, args=("cred.json", database, Path(table).stem))
+                        thread_list.append(thread)
+                    elif str(action) == "remove_old_staged_files":
+                        thread = threading.Thread(target=remove_old_staged_files, args=("cred.json", database))
+                        thread_list.append(thread)
+                    elif str(action) == "load_history":
+                        thread = threading.Thread(target=load_history, args=("cred.json", database))
+                        thread_list.append(thread)
     for thr in thread_list:
         thr.start()
     for thre in thread_list:
@@ -188,10 +159,9 @@ def archive():
 
 
 if __name__ == "__main__":
-    delete_old_staged_files()
+    perform_action("remove_old_staged_files")
     main()
-    copy_main()
-    history()
+    perform_action("copy")
+    perform_action("load_history")
     archive()
-
     print("end:  ", datetime.datetime.now())
