@@ -10,16 +10,35 @@ from os import listdir
 from os.path import join, isdir
 import os.path
 import shutil
+import logging
+
 print("startprg:  ", datetime.datetime.now())
+
+# now we will Create and configure logger
+logging.basicConfig(filename="log.txt",
+                    format='%(asctime)s :- %(name)s - %(levelname)s - %(message)s',
+                    filemode='w')
+
+# Let us Create an object
+logger = logging.getLogger()
+
+# Now we are going to Set the threshold of logger to DEBUG
+logger.setLevel(logging.INFO)
 
 
 def connect(config_file):
-    cone = Configure(config_file)
-    config_data = cone.config()
-    connection = snowflake.connector.connect(
-        user=config_data["user"],
-        password=config_data["password"],
-        account=config_data["account"], )
+    connection = ""
+    try:
+        cone = Configure(config_file)
+        config_data = cone.config()
+        connection = snowflake.connector.connect(
+            user=config_data["user"],
+            password=config_data["password"],
+            account=config_data["account"], )
+        logger.info("Connection established")
+    except:
+        logger.error("Connection failed: Check credentials")
+        print("Connection failed: Check credentials")
     return connection
 
 
@@ -35,8 +54,10 @@ def upload(config_file, source_file, database):
     try:
         sql = "PUT file:///" + source_file + " @" + database + ";"
         cs.execute(sql)
+        logger.info(sql + " executed")
     finally:
         cs.close()
+        logger.error("Please check the query")
     connection.close()
 
 
@@ -47,6 +68,7 @@ def main():
     resultfiles = split(config_datas["source"])
     thread_list = []
     print("startupload:  ", datetime.datetime.now())
+    logger.info(" Uploading files into Database stages")
     for file in resultfiles:
         for direc in listdir(config_datas["source"]):
             if isdir(join(config_datas["source"], direc)) and str(direc) in file:
@@ -78,8 +100,10 @@ def copy(config_file, database, table):
         res = sql.replace("table", table, 2)
         res_ = res.replace("stage", database, 1)
         cs.execute(res_)
-    finally:
+        logger.info(res_ + " executed")
+    except:
         cs.close()
+        logger.error("Please check the query")
     connection.close()
 
 
@@ -89,6 +113,7 @@ def copy_main():
     source = config_datas["source"]
     thread_list = []
     print("startcopy:  ", datetime.datetime.now())
+    logger.info("Copying files into stage database")
     for database in listdir(source):
         if isdir(join(source, database)):
             for table in listdir(join(source, database)):
@@ -113,8 +138,10 @@ def remove_old_staged_files(config_file, database):
     try:
         sql = "REMOVE @" + database + " pattern='.*.csv.gz';"
         cs.execute(sql)
-    finally:
+        logger.info(sql + " executed")
+    except:
         cs.close()
+        logger.error("Please check the query")
     connection.close()
 
 
@@ -124,6 +151,7 @@ def delete_old_staged_files():
     source = config_datas["source"]
     thread_list = []
     print("remove old stage files:  ", datetime.datetime.now())
+    logger.info("Deleting old staged files from database stages")
     for database in listdir(source):
         if isdir(join(source, database)):
             thread = threading.Thread(target=remove_old_staged_files, args=("cred.json", database))
@@ -152,7 +180,7 @@ def load_history(config_file, database):
             print("Error:   ", database)
         else:
             print("Loaded successfully:   ", database)
-    finally:
+    except:
         cs.close()
     connection.close()
     return
@@ -164,6 +192,7 @@ def history():
     source = config_datas["source"]
     thread_list = []
     print("Checking loading history:  ", datetime.datetime.now())
+    logger.info("Getting Copy/Load history for each database")
     for database in listdir(source):
         if isdir(join(source, database)):
             thread = threading.Thread(target=load_history, args=("cred.json", database))
@@ -179,6 +208,7 @@ def archive():
     config_datas = con.config()
     source = config_datas["source"]
     target = config_datas["archive"]
+    logger.info("Moving processed files from source to archive")
     for file in listdir(source):
         shutil.move(os.path.join(source, file), target)
 
@@ -189,5 +219,6 @@ if __name__ == "__main__":
     copy_main()
     history()
     archive()
+    logger.info("End of process")
 
     print("end:  ", datetime.datetime.now())
