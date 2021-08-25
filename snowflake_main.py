@@ -14,15 +14,12 @@ import logging
 
 print("startprg:  ", datetime.datetime.now())
 
-# now we will Create and configure logger
 logging.basicConfig(filename="log.txt",
                     format='%(asctime)s :- %(name)s - %(levelname)s - %(message)s',
                     filemode='w')
 
-# Let us Create an object
 logger = logging.getLogger()
 
-# Now we are going to Set the threshold of logger to DEBUG
 logger.setLevel(logging.INFO)
 
 
