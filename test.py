@@ -1,20 +1,27 @@
-#importing the module
-import logging
+from splitfile import split
+from config import Configure
+import datetime
+from os import listdir
+import threading
+from os.path import join, isdir
 
-#now we will Create and configure logger
-logging.basicConfig(filename="log.txt",
-					format='%(asctime)s %(message)s',
-					filemode='w')
 
-#Let us Create an object
-logger=logging.getLogger()
+def i(config_file, source_file, database):
+	print(config_file, source_file, database)
 
-#Now we are going to Set the threshold of logger to DEBUG
-logger.setLevel(logging.DEBUG)
 
-#some messages to test
-logger.debug("This is just a harmless debug message")
-logger.info("This is just an information for you")
-logger.warning("OOPS!!!Its a Warning")
-logger.error("Have you try to divide a number by zero")
-logger.critical("The Internet is not working....")
+con = Configure("cred.json")
+config_datas = con.config()
+resultfiles = split(config_datas["source"])
+thread_list = []
+for file in resultfiles:
+	for direc in listdir(config_datas["source"]):
+		if isdir(join(config_datas["source"], direc)) and str(direc) in file:
+			for dire in listdir(join(config_datas["source"])):
+				if dire in file:
+					thread = threading.Thread(target=i, args=("cred.json", file, direc))
+					thread_list.append(thread)
+for thr in thread_list:
+	thr.start()
+for thre in thread_list:
+	thre.join()
