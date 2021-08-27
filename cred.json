@@ -6,6 +6,9 @@
   "schema": "PUBLIC",
   "warehouse": "SNOWFLAKE_POC",
   "filesource": "C:\\Users\\sree\\OneDrive\\Desktop\\data_source\\source",
+  "temp": "C:\\Users\\sree\\OneDrive\\Desktop\\data_source\\temp",
   "archive": "C:\\Users\\sree\\OneDrive\\Desktop\\data_source\\Archive",
-"role": "ACCOUNTADMIN"
+  "role": "ACCOUNTADMIN",
+  "client1": ["demotable1_1_.csv", "demotable1_2_.csv"],
+  "client2": ["demotable2_1_.csv", "demotable2_2_.csv"]
 }

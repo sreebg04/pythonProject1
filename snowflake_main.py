@@ -219,13 +219,3 @@ def archive():
     logger.info("Moving processed files from source to archive")
     for file in listdir(source):
         shutil.move(os.path.join(source, file), target)
-
-
-if __name__ == "__main__":
-    delete_old_staged_files()
-    main()
-    copy_main()
-    history()
-    archive()
-    logger.info("End of Process")
-    print("end:  ", datetime.datetime.now())

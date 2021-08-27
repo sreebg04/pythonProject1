@@ -19,5 +19,9 @@ class Configure:
         source = cred["filesource"]
         archive = cred["archive"]
         role = cred["role"]
+        client1 = cred["client1"]
+        client2 = cred["client2"]
+        temp = cred["temp"]
         return {"password": password, "user": user, "account": account, "warehouse": warehouse, "database": database,
-                "schema": schema, "source": source, "archive": archive, "role": role}
+                "schema": schema, "source": source, "archive": archive, "role": role,
+                "client1": client1, "client2": client2, "temp": temp}
