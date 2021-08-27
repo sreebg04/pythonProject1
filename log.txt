@@ -108,3 +108,49 @@
 2021-08-27 13:07:30,912 - Thread-5 snowflake_main.py:52 - upload() - INFO - PUT file:///C:\Users\sree\OneDrive\Desktop\data_source\source\client1\demotable1_1_\demotable1_1__3.csv @client1; executed
 2021-08-27 13:07:41,459 - MainThread snowflake_main.py:219 - archive() - INFO - Moving processed files from source to archive
 2021-08-27 13:09:11,996 - MainThread test.py:37 - <module>() - INFO - End of Process
+2021-08-27 16:40:51,211 - MainThread snowflake_main.py:158 - delete_old_staged_files() - INFO - Deleting old staged files from database stages
+2021-08-27 16:40:53,539 - Thread-1 snowflake_main.py:26 - connect() - INFO - Connection established successfully
+2021-08-27 16:40:55,321 - Thread-1 snowflake_main.py:142 - remove_old_staged_files() - INFO - REMOVE @client1 pattern='.*.csv.gz'; executed
+2021-08-27 16:41:27,950 - MainThread snowflake_main.py:69 - main() - INFO -  Uploading files into Database stages
+2021-08-27 16:41:29,487 - Thread-2 snowflake_main.py:26 - connect() - INFO - Connection established successfully
+2021-08-27 16:41:29,487 - Thread-8 snowflake_main.py:26 - connect() - INFO - Connection established successfully
+2021-08-27 16:41:29,549 - Thread-9 snowflake_main.py:26 - connect() - INFO - Connection established successfully
+2021-08-27 16:41:29,581 - Thread-5 snowflake_main.py:26 - connect() - INFO - Connection established successfully
+2021-08-27 16:41:29,596 - Thread-13 snowflake_main.py:26 - connect() - INFO - Connection established successfully
+2021-08-27 16:41:29,612 - Thread-10 snowflake_main.py:26 - connect() - INFO - Connection established successfully
+2021-08-27 16:41:29,612 - Thread-12 snowflake_main.py:26 - connect() - INFO - Connection established successfully
+2021-08-27 16:41:29,628 - Thread-6 snowflake_main.py:26 - connect() - INFO - Connection established successfully
+2021-08-27 16:41:29,643 - Thread-3 snowflake_main.py:26 - connect() - INFO - Connection established successfully
+2021-08-27 16:41:29,643 - Thread-11 snowflake_main.py:26 - connect() - INFO - Connection established successfully
+2021-08-27 16:41:29,690 - Thread-7 snowflake_main.py:26 - connect() - INFO - Connection established successfully
+2021-08-27 16:41:29,737 - Thread-4 snowflake_main.py:26 - connect() - INFO - Connection established successfully
+2021-08-27 16:41:34,453 - Thread-13 snowflake_main.py:52 - upload() - INFO - PUT file:///C:\Users\sree\OneDrive\Desktop\data_source\source\client1\demotable1_2_\demotable1_2__6.csv @client1; executed
+2021-08-27 16:41:34,465 - Thread-7 snowflake_main.py:52 - upload() - INFO - PUT file:///C:\Users\sree\OneDrive\Desktop\data_source\source\client1\demotable1_1_\demotable1_1__6.csv @client1; executed
+2021-08-27 16:42:43,737 - Thread-11 snowflake_main.py:52 - upload() - INFO - PUT file:///C:\Users\sree\OneDrive\Desktop\data_source\source\client1\demotable1_2_\demotable1_2__4.csv @client1; executed
+2021-08-27 16:42:46,630 - Thread-9 snowflake_main.py:52 - upload() - INFO - PUT file:///C:\Users\sree\OneDrive\Desktop\data_source\source\client1\demotable1_2_\demotable1_2__2.csv @client1; executed
+2021-08-27 16:42:51,523 - Thread-12 snowflake_main.py:52 - upload() - INFO - PUT file:///C:\Users\sree\OneDrive\Desktop\data_source\source\client1\demotable1_2_\demotable1_2__5.csv @client1; executed
+2021-08-27 16:43:31,483 - Thread-6 snowflake_main.py:52 - upload() - INFO - PUT file:///C:\Users\sree\OneDrive\Desktop\data_source\source\client1\demotable1_1_\demotable1_1__5.csv @client1; executed
+2021-08-27 16:43:37,706 - Thread-5 snowflake_main.py:52 - upload() - INFO - PUT file:///C:\Users\sree\OneDrive\Desktop\data_source\source\client1\demotable1_1_\demotable1_1__4.csv @client1; executed
+2021-08-27 16:43:42,338 - Thread-4 snowflake_main.py:52 - upload() - INFO - PUT file:///C:\Users\sree\OneDrive\Desktop\data_source\source\client1\demotable1_1_\demotable1_1__3.csv @client1; executed
+2021-08-27 16:43:42,447 - Thread-2 snowflake_main.py:52 - upload() - INFO - PUT file:///C:\Users\sree\OneDrive\Desktop\data_source\source\client1\demotable1_1_\demotable1_1__1.csv @client1; executed
+2021-08-27 16:43:48,637 - Thread-10 snowflake_main.py:52 - upload() - INFO - PUT file:///C:\Users\sree\OneDrive\Desktop\data_source\source\client1\demotable1_2_\demotable1_2__3.csv @client1; executed
+2021-08-27 16:43:57,082 - Thread-3 snowflake_main.py:52 - upload() - INFO - PUT file:///C:\Users\sree\OneDrive\Desktop\data_source\source\client1\demotable1_1_\demotable1_1__2.csv @client1; executed
+2021-08-27 16:44:05,363 - Thread-8 snowflake_main.py:52 - upload() - INFO - PUT file:///C:\Users\sree\OneDrive\Desktop\data_source\source\client1\demotable1_2_\demotable1_2__1.csv @client1; executed
+2021-08-27 16:44:06,681 - MainThread snowflake_main.py:117 - copy_main() - INFO - Copying files into stage database
+2021-08-27 16:44:08,003 - Thread-15 snowflake_main.py:26 - connect() - INFO - Connection established successfully
+2021-08-27 16:44:08,035 - Thread-14 snowflake_main.py:26 - connect() - INFO - Connection established successfully
+2021-08-27 16:44:22,159 - Thread-15 snowflake_main.py:101 - copy() - INFO - COPY into demotable1_2_
+        FROM @client1
+        file_format = (type = csv field_optionally_enclosed_by='"' skip_header=1)
+        pattern = '.*demotable1_2__[1-6].csv.gz'
+        on_error = 'ABORT_STATEMENT'; executed
+2021-08-27 16:44:22,753 - Thread-14 snowflake_main.py:101 - copy() - INFO - COPY into demotable1_1_
+        FROM @client1
+        file_format = (type = csv field_optionally_enclosed_by='"' skip_header=1)
+        pattern = '.*demotable1_1__[1-6].csv.gz'
+        on_error = 'ABORT_STATEMENT'; executed
+2021-08-27 16:44:23,316 - MainThread snowflake_main.py:203 - history() - INFO - Getting Copy/Load history for each database
+2021-08-27 16:44:24,550 - Thread-16 snowflake_main.py:26 - connect() - INFO - Connection established successfully
+2021-08-27 16:44:27,613 - Thread-16 snowflake_main.py:187 - load_history() - INFO - Copy/Load history for database has No error
+2021-08-27 16:44:28,175 - MainThread snowflake_main.py:219 - archive() - INFO - Moving processed files from source to archive
+2021-08-27 16:44:28,332 - MainThread client_monitor.py:37 - <module>() - INFO - End of Process
